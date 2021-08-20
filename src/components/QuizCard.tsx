@@ -1,15 +1,23 @@
 import { Button, Card } from "react-bootstrap";
+import { IQuizFn } from "../interfaces/types";
 
-const QuizCard = () => {
+const QuizCard: React.FC<IQuizFn> = (props) => {
+  const value =
+    props._id === props.showAnswer ? props.answer : "Click on Answer";
   return (
     <Card>
-      <Card.Header>Featured</Card.Header>
+      <Card.Header>{props.topic}</Card.Header>
       <Card.Body>
-        <Card.Title>Special title treatment</Card.Title>
-        <Card.Text>
-          With supporting text below as a natural lead-in to additional content.
-        </Card.Text>
-        <Button variant="primary">Go somewhere</Button>
+        <Card.Title>{props.question}</Card.Title>
+
+        <Card.Text>{value}</Card.Text>
+
+        <Button variant="primary" onClick={props.revealAnswer}>
+          Answer
+        </Button>
+        <Button variant="outline-danger" onClick={props.quizDelete}>
+          Delete
+        </Button>
       </Card.Body>
     </Card>
   );
