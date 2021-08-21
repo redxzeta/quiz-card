@@ -1,14 +1,25 @@
 import { useEffect, useState } from "react";
-import { Container } from "react-bootstrap";
+import { Button, Container } from "react-bootstrap";
+import { deleteQuizById, getAllQuizzes, postNewQuiz } from "./api/fetch";
+import NewQuiz from "./components/NewQuiz";
 import QuizCard from "./components/QuizCard";
-import { IQuiz } from "./interfaces/types";
-
+import { IQuiz, IQuizForm } from "./interfaces/types";
+const sampleData = {
+  question: "WOAHO",
+  answer: "NOssf",
+  topic: "test",
+  author: "Carl",
+};
 function App() {
-  const [quiz, setQuiz] = useState([]);
+  const [quiz, setQuiz] = useState<IQuiz[] | []>([]);
   const [showAnswer, setShowAnswer] = useState("false");
+  const [show, setShow] = useState(false);
+
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   useEffect(() => {
     const fetchData = async () => {
-      const response = await fetch(`${process.env.REACT_APP_EXPRESS}`);
+      const response = await getAllQuizzes();
       const data = await response.json();
       setQuiz(data);
     };
@@ -16,9 +27,7 @@ function App() {
   }, []);
 
   const deleteQuiz = async (id: string) => {
-    const response = await fetch(`${process.env.REACT_APP_EXPRESS}/${id}`, {
-      method: "DELETE",
-    });
+    const response = await deleteQuizById(id);
     const data = await response.json();
     console.log(data);
     const quizList = quiz.filter((q: IQuiz) => q._id !== id);
@@ -31,11 +40,28 @@ function App() {
       setShowAnswer(id);
     }
   };
+  const postQuiz = async (newQuiz: IQuizForm) => {
+    const response = await postNewQuiz(newQuiz);
+    const data: IQuiz = await response.json();
+    const result: IQuiz[] = [...quiz, data];
+
+    setQuiz(result);
+  };
   return (
     <main>
       <Container>
         <h1>Fun Quiz Time</h1>
-
+        <Button variant="outline-info" onClick={handleShow}>
+          Add Quiz
+        </Button>
+        <Button variant="outline-warning" onClick={() => postQuiz(sampleData)}>
+          Test
+        </Button>
+        <NewQuiz
+          show={show}
+          handleClose={handleClose}
+          handleOpen={handleShow}
+        />
         {quiz.map((q: IQuiz) => (
           <QuizCard
             key={q._id}

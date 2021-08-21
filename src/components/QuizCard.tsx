@@ -12,7 +12,7 @@ const QuizCard: React.FC<IQuizFn> = (props) => {
 
         <Card.Text>{value}</Card.Text>
 
-        <Button variant="primary" onClick={props.revealAnswer}>
+        <Button variant="outline-primary" onClick={props.revealAnswer}>
           Answer
         </Button>
         <Button variant="outline-danger" onClick={props.quizDelete}>
