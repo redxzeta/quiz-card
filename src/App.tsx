@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Button, Container } from "react-bootstrap";
+import { Button, Container, Row } from "react-bootstrap";
 import { deleteQuizById, getAllQuizzes, postNewQuiz } from "./api/fetch";
 import NewQuiz from "./components/NewQuiz";
 import QuizCard from "./components/QuizCard";
@@ -62,20 +62,22 @@ function App() {
           handleClose={handleClose}
           handleOpen={handleShow}
         />
-        {quiz.map((q: IQuiz) => (
-          <QuizCard
-            key={q._id}
-            created={q.created}
-            answer={q.answer}
-            author={q.author}
-            _id={q._id}
-            question={q.question}
-            topic={q.topic}
-            showAnswer={showAnswer}
-            revealAnswer={() => revealAnswer(q._id)}
-            quizDelete={() => deleteQuiz(q._id)}
-          />
-        ))}
+        <Row>
+          {quiz.map((q: IQuiz) => (
+            <QuizCard
+              key={q._id}
+              created={q.created}
+              answer={q.answer}
+              author={q.author}
+              _id={q._id}
+              question={q.question}
+              topic={q.topic}
+              showAnswer={showAnswer}
+              revealAnswer={() => revealAnswer(q._id)}
+              quizDelete={() => deleteQuiz(q._id)}
+            />
+          ))}
+        </Row>
       </Container>
     </main>
   );
