@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+import { useEffect, useReducer, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
 import { deleteQuizById, getAllQuizzes, postNewQuiz } from "./api/fetch";
 import NewQuiz from "./components/NewQuiz";
 import QuizCard from "./components/QuizCard";
 import { IQuiz, IQuizForm } from "./interfaces/types";
+import { quizInitialState, quizReducer } from "./reducers/quizReducer";
 const sampleData = {
   question: "WOAHO",
   answer: "NOssf",
@@ -11,7 +12,6 @@ const sampleData = {
   author: "Carl",
 };
 function App() {
-  const [quiz, setQuiz] = useState<IQuiz[] | []>([]);
   const [showAnswer, setShowAnswer] = useState("false");
   const [show, setShow] = useState(false);
 
@@ -21,7 +21,7 @@ function App() {
     const fetchData = async () => {
       const response = await getAllQuizzes();
       const data = await response.json();
-      setQuiz(data);
+      dispatch({ type: "FETCH", payload: data });
     };
     fetchData();
   }, []);
@@ -30,8 +30,7 @@ function App() {
     const response = await deleteQuizById(id);
     const data = await response.json();
     console.log(data);
-    const quizList = quiz.filter((q: IQuiz) => q._id !== id);
-    setQuiz(quizList);
+    dispatch({ type: "DELETE", id: id });
   };
   const revealAnswer = (id: string) => {
     if (id === showAnswer) {
@@ -43,10 +42,10 @@ function App() {
   const postQuiz = async (newQuiz: IQuizForm) => {
     const response = await postNewQuiz(newQuiz);
     const data: IQuiz = await response.json();
-    const result: IQuiz[] = [...quiz, data];
-
-    setQuiz(result);
+    dispatch({ type: "ADD", payload: data });
   };
+
+  const [state, dispatch] = useReducer(quizReducer, quizInitialState);
   return (
     <main>
       <Container>
@@ -63,7 +62,7 @@ function App() {
           handleOpen={handleShow}
         />
         <Row>
-          {quiz.map((q: IQuiz) => (
+          {state.quizList.map((q: IQuiz) => (
             <QuizCard
               key={q._id}
               created={q.created}

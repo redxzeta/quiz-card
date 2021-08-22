@@ -34,5 +34,18 @@ export const quizReducer = (state: IQuizState, action: QuizAction) => {
         quizList: action.payload,
         prevQuizList: action.payload,
       };
+    case "DELETE":
+      return {
+        ...state,
+        prevQuizList: state.quizList,
+        quizList: state.quizList.filter((q: IQuiz) => q._id !== action.id),
+      };
+    case "UNDO":
+      return {
+        ...state,
+        quizList: state.prevQuizList,
+      };
+    default:
+      return state;
   }
 };
