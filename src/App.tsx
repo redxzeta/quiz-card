@@ -1,16 +1,11 @@
 import { useEffect, useReducer, useState } from "react";
 import { Button, Container, Row } from "react-bootstrap";
-import { deleteQuizById, getAllQuizzes, postNewQuiz } from "./api/fetch";
+import { deleteQuizById, getAllQuizzes } from "./api/fetch";
 import NewQuiz from "./components/NewQuiz";
 import QuizCard from "./components/QuizCard";
-import { IQuiz, IQuizForm } from "./interfaces/types";
+import { IQuiz } from "./interfaces/types";
 import { quizInitialState, quizReducer } from "./reducers/quizReducer";
-const sampleData = {
-  question: "WOAHO",
-  answer: "NOssf",
-  topic: "test",
-  author: "Carl",
-};
+
 function App() {
   const [showAnswer, setShowAnswer] = useState("false");
   const [show, setShow] = useState(false);
@@ -39,11 +34,6 @@ function App() {
       setShowAnswer(id);
     }
   };
-  const postQuiz = async (newQuiz: IQuizForm) => {
-    const response = await postNewQuiz(newQuiz);
-    const data: IQuiz = await response.json();
-    dispatch({ type: "ADD", payload: data });
-  };
   const addNewQuiz = (data: IQuiz) => dispatch({ type: "ADD", payload: data });
   const [state, dispatch] = useReducer(quizReducer, quizInitialState);
   return (
@@ -53,9 +43,7 @@ function App() {
         <Button variant="outline-info" onClick={handleShow}>
           Add Quiz
         </Button>
-        <Button variant="outline-warning" onClick={() => postQuiz(sampleData)}>
-          Test
-        </Button>
+
         <NewQuiz
           show={show}
           handleClose={handleClose}
