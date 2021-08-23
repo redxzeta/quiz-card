@@ -2,14 +2,6 @@ import { IQuiz, IQuizForm } from "../interfaces/types";
 
 const quizApi = process.env.REACT_APP_EXPRESS;
 
-export const deleteQuiz = async (id: string) => {
-  const response = await fetch(`${process.env.REACT_APP_EXPRESS}/${id}`, {
-    method: "DELETE",
-  });
-  const data = await response.json();
-  console.log(data);
-};
-
 export const deleteQuizById = (id: string) =>
   fetch(`${quizApi}/${id}`, { method: "DELETE" });
 
