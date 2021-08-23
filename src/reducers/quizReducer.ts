@@ -45,6 +45,13 @@ export const quizReducer = (state: IQuizState, action: QuizAction) => {
         ...state,
         quizList: state.prevQuizList,
       };
+    case "UPDATE":
+      return {
+        ...state,
+        quizList: state.quizList.map((q: IQuiz) =>
+          q._id === action.id ? action.payload : q
+        ),
+      };
     default:
       return state;
   }

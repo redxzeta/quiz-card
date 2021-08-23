@@ -27,4 +27,5 @@ export interface IModal {
   show: boolean;
   handleClose: () => void;
   handleOpen: () => void;
+  addQuiz: (data: IQuiz) => void;
 }

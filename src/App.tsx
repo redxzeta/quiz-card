@@ -44,7 +44,7 @@ function App() {
     const data: IQuiz = await response.json();
     dispatch({ type: "ADD", payload: data });
   };
-
+  const addNewQuiz = (data: IQuiz) => dispatch({ type: "ADD", payload: data });
   const [state, dispatch] = useReducer(quizReducer, quizInitialState);
   return (
     <main>
@@ -60,6 +60,7 @@ function App() {
           show={show}
           handleClose={handleClose}
           handleOpen={handleShow}
+          addQuiz={(data) => addNewQuiz(data)}
         />
         <Row>
           {state.quizList.map((q: IQuiz) => (
